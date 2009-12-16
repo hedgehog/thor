@@ -3,6 +3,7 @@ require 'thor/group'
 require 'thor/actions'
 
 if $THOR_TEST_STACK
+  require 'stringio'
   require 'rubygems'
   require 'rr'
   require 'diff/lcs' # You need diff/lcs installed to run specs (but not to run Thor).  
