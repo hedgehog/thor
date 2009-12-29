@@ -3,7 +3,10 @@
 require File.join(File.dirname(__FILE__), "lib", "thor", "version")
 require 'thor/rake_compat'
 require 'spec/rake/spectask'
+begin
 require 'rdoc/task'
+rescue LoadError
+end
 
 GEM_NAME = 'thor'
 EXTRA_RDOC_FILES = ["README.rdoc", "LICENSE", "CHANGELOG.rdoc", "VERSION", "Thorfile"]
@@ -24,7 +27,7 @@ class Default < Thor
     t.rcov = true
     t.rcov_dir = "rcov"
   end
-
+  if defined?(RDoc)
   RDoc::Task.new do |rdoc|
     rdoc.main     = "README.rdoc"
     rdoc.rdoc_dir = "rdoc"
@@ -33,7 +36,7 @@ class Default < Thor
     rdoc.rdoc_files.include('lib/**/*.rb')
     rdoc.options << '--line-numbers' << '--inline-source'
   end
-
+  end
   begin
     require 'jeweler'
     Jeweler::Tasks.new do |s|
