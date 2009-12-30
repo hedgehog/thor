@@ -20,17 +20,27 @@ describe Thor::Invocation do
       A.new.invoke(:five, [7]).must be_false
     end
 
-    it "invokes the default task if none is given to a Thor class" do
-      content = capture(:stdout){ A.new.invoke("b") }
-      content.must =~ /Tasks/
-      content.must =~ /LAST_NAME/
+    it "invokes the default task of given class passed as default namespace" do
+      content = capture(:stdout){ A.new.invoke("b", [1,2,3]) }
+      content.must =~ /default/
     end
 
-    it "accepts a class as argument without a task to invoke" do
-      content = capture(:stdout){ A.new.invoke(B) }
-      content.must =~ /Tasks/
-      content.must =~ /LAST_NAME/
+    it "invokes default task of class given as argument without a task to invoke" do
+      content = capture(:stdout){ A.new.invoke(B, [1,2,3]) }
+      content.must =~ /default/
     end
+
+    it "raises error on invoking the default task of namespace with wrong arity" do
+      lambda do
+        A.new.invoke('b', ['1'])
+      end.must raise_error(ArgumentError)
+     end
+
+    it "raises error on invoking the default task of class with wrong arity" do
+      lambda do
+        A.new.invoke(B, ['1'])
+      end.must raise_error(ArgumentError)
+     end
 
     it "accepts a class as argument with a task to invoke" do
       base = A.new([], :last_name => "Valim")
