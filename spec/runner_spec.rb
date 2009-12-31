@@ -84,8 +84,10 @@ describe Thor::Runner do
     end
 
     it "does not swallow Thor ArgumentError" do
-      ARGV.replace ["my_script:animal"]
-      capture(:stderr) { Thor::Runner.start }.must =~ /'animal' was called incorrectly\. Call as 'my_script:animal TYPE'/
+      lambda do
+        ARGV.replace ["my_script:animal"]
+        Thor::Runner.start
+      end.must raise_error(ArgumentError, /'animal' was called incorrectly. Are you sure it has arity equals to 0\?/)
     end
   end
 

@@ -112,7 +112,9 @@ describe Thor do
     end
 
     it "raises an error if a required param is not provided" do
-      capture(:stderr) { MyScript.start(["animal"]) }.must =~ /'animal' was called incorrectly\. Call as 'my_script:animal TYPE'/
+      lambda do
+        MyScript.start(["animal"]) 
+      end.must raise_error(ArgumentError, /'animal' was called incorrectly. Are you sure it has arity equals to 0\?/)
     end
 
     it "raises an error if the invoked task does not exist" do
