@@ -38,6 +38,13 @@ end
 
 class B < Thor
   class_option :last_name, :type => :string
+  default_task :default
+
+  desc "default  arg1, arg2, arg3", "invoke b:default arg1, arg2, arg3", {}
+  def default(arg1, arg2, arg3)
+    res = "default #{arg1} #{arg2} #{arg3}"
+    p res
+  end
 
   desc "one FIRST_NAME", "invoke one"
   def one(first_name)
@@ -68,6 +75,16 @@ class C < Thor::Group
 
   def three
     p 3
+  end
+end
+
+class D < Thor
+  default_task :default
+
+  desc "default [arg1], [arg2], [arg3] ", "invoke b:default [arg1], [arg2], [arg3]", {}
+  def default(arg1='a', arg2='b', arg3='c')
+    res = "default #{arg1} #{arg2} #{arg3}"
+    p res
   end
 end
 
