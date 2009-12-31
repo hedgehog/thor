@@ -100,9 +100,10 @@ class Thor
         if backtrace.empty? && e.message =~ /wrong number of arguments/
           no_match = !(instance.shell.base.class.is_a?(instance.class))
           if instance.is_a?(Thor::Group) or no_match 
-            raise e, "'#{name}' was called incorrectly. Are you sure it has arity equals to 0?"
+            raise e, "'#{instance.class}\##{name}' was called incorrectly. Are you sure provided " <<
+                     "arguments '#{formatted_arguments(instance.class)}'"
           else
-            raise InvocationError, "'#{name}' was called incorrectly. Call as " <<
+            raise InvocationError, "'#{instance.class}\##{name}' was called incorrectly. Call as " <<
                                    "'#{formatted_usage(instance.class, true)}'"
           end
         else
