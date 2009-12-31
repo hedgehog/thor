@@ -22,12 +22,22 @@ describe Thor::Invocation do
 
     it "invokes the default task of given class passed as default namespace" do
       content = capture(:stdout){ A.new.invoke("b", [1,2,3]) }
-      content.must =~ /default/
+      content.must == "\"default 1 2 3\"\n"
     end
 
     it "invokes default task of class given as argument without a task to invoke" do
       content = capture(:stdout){ A.new.invoke(B, [1,2,3]) }
-      content.must =~ /default/
+      content.must == "\"default 1 2 3\"\n"
+    end
+
+    it "invokes the default task of given class passed as default namespace" do
+      content = capture(:stdout){ A.new.invoke("b", "default", [1,2,3]) }
+      content.must == "\"default 1 2 3\"\n"
+    end
+
+    it "invokes default task of class given as argument without a task to invoke" do
+      content = capture(:stdout){ A.new.invoke(B, [1,2,3]) }
+      content.must == "\"default 1 2 3\"\n"
     end
 
     it "raises error on invoking the default task of namespace with wrong arity" do
@@ -39,6 +49,63 @@ describe Thor::Invocation do
     it "raises error on invoking the default task of class with wrong arity" do
       lambda do
         A.new.invoke(B, ['1'])
+      end.must raise_error(ArgumentError)
+     end
+
+    it "invokes the default task with default arguments of given class passed as default namespace" do
+      content = capture(:stdout){ A.new.invoke("d") }
+      content.must == "\"default a b c\"\n"
+    end
+
+    it "invokes default task  with default arguments of class given as argument without a task to invoke" do
+      content = capture(:stdout){ A.new.invoke(D) }
+      content.must == "\"default a b c\"\n"
+    end
+
+    it "invokes the default task  with default arguments of given class passed as default namespace" do
+      content = capture(:stdout){ A.new.invoke("d") }
+      content.must == "\"default a b c\"\n"
+    end
+
+    it "invokes default task  with default arguments of class given as argument without a task to invoke" do
+      content = capture(:stdout){ A.new.invoke(D) }
+      content.must == "\"default a b c\"\n"
+    end
+
+    it "invokes the default task with custom and default arguments of given class passed as default namespace" do
+      content = capture(:stdout){ A.new.invoke("d", ['1']) }
+      content.must == "\"default 1 b c\"\n"
+    end
+
+    it "invokes default task with custom and default arguments of class given as argument without a task to invoke" do
+      content = capture(:stdout){ A.new.invoke(D, ['1']) }
+      content.must == "\"default 1 b c\"\n"
+    end
+
+    it "raises no errors on invoking the default task  with default arguments of namespace with wrong arity" do
+      capture(:stdout) do
+        lambda do
+          A.new.invoke('d', ['1'])
+        end.must_not raise_error(ArgumentError)
+      end
+    end
+
+    it "raises no errors on invoking the default task  with default arguments of class with wrong arity" do
+      capture(:stdout) do
+         lambda do
+           A.new.invoke(D, ['1'])
+         end.must_not raise_error(ArgumentError)
+      end
+    end
+
+    it "raises no errors on invoking the default task  with default arguments of namespace with wrong arity" do
+      lambda do
+        A.new.invoke('d', ['1','','','',''])
+      end.must raise_error(ArgumentError)
+    end
+    it "raises no errors on invoking the default task  with default arguments of namespace with wrong arity" do
+      lambda do
+        A.new.invoke(D, ['1','','','',''])
       end.must raise_error(ArgumentError)
      end
 
