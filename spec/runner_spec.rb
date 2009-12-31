@@ -87,7 +87,7 @@ describe Thor::Runner do
       lambda do
         ARGV.replace ["my_script:animal"]
         Thor::Runner.start
-      end.must raise_error(ArgumentError, /'animal' was called incorrectly. Are you sure it has arity equals to 0\?/)
+      end.must raise_error(ArgumentError, /my_script:animal called incorrectly. Were required arguments provided\? my_script:animal TYPE/)
     end
   end
 
