@@ -98,7 +98,8 @@ class Thor
         backtrace = sans_backtrace(e.backtrace, caller)
 
         if backtrace.empty? && e.message =~ /wrong number of arguments/
-          if instance.is_a?(Thor::Group)
+          no_match = !(instance.shell.base.class.is_a?(instance.class))
+          if instance.is_a?(Thor::Group) or no_match 
             raise e, "'#{name}' was called incorrectly. Are you sure it has arity equals to 0?"
           else
             raise InvocationError, "'#{name}' was called incorrectly. Call as " <<
