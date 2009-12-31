@@ -80,7 +80,7 @@ describe Thor::Runner do
 
     it "does not swallow Thor::Group ArgumentError" do
       ARGV.replace ["whiny_generator"]
-      lambda { Thor::Runner.start }.must raise_error(ArgumentError, /Are you sure it has arity equals to 0\?/)
+      lambda { Thor::Runner.start }.must raise_error(ArgumentError, /whiny_generator:wrong_arity called incorrectly. Were required arguments provided\? whiny_generator:/)
     end
 
     it "does not swallow Thor ArgumentError" do

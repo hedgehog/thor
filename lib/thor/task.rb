@@ -45,29 +45,53 @@ class Thor
     # injected in the usage.
     #
     def formatted_usage(klass=nil, namespace=false, show_options=true)
-      formatted = if namespace.is_a?(String)
-        "#{namespace}:"
-      elsif klass && namespace
-        "#{klass.namespace.gsub(/^default/,'')}:"
-      else
-        ""
-      end
-
-      formatted << formatted_arguments(klass)
+      formatted = formatted_arguments(klass, namespace)
       formatted << " #{formatted_options}" if show_options
       formatted.strip!
       formatted
     end
 
+    # Returns the formatted task name. If a class is given, the namespace
+    # is retrived from the class.
+    #
+    def formatted_task_name(klass=nil, namespace=false)
+      nm = name
+      ns = formatted_namespace(klass, namespace)
+      if namespace
+       "#{ns}#{nm}"
+      else
+        "#{nm}"
+      end
+    end
+
+    # Returns the formatted namespace. If a class is given, the namespace
+    # is retrived from the class.
+    #
+    def formatted_namespace(klass=nil, namespace=false)
+      if namespace.is_a?(String)
+        "#{namespace}:"
+      elsif namespace
+        "#{klass.namespace.gsub(/^default/,'')}:"
+      else
+        ""
+      end
+    end
+
     # Injects the class arguments into the task usage.
     #
-    def formatted_arguments(klass)
-      if klass && !klass.arguments.empty?
+    def formatted_arguments(klass, namespace=false)
+      usg = if klass && !klass.arguments.empty?
         usage.to_s.gsub(/^#{name}/) do |match|
           match << " " << klass.arguments.map{ |a| a.usage }.join(' ')
         end
       else
         usage.to_s
+      end
+      if namespace
+        ns = formatted_namespace(klass, namespace) 
+        ns << usg
+      else
+        usg
       end
     end
 
@@ -96,15 +120,18 @@ class Thor
 
       def parse_argument_error(instance, e, caller) #:nodoc:
         backtrace = sans_backtrace(e.backtrace, caller)
+        tn = "#{formatted_task_name(instance.class, true)}"
+        usg = "#{formatted_usage(instance.class, true, true)}"
+        msg = "#{tn} called incorrectly. "
 
         if backtrace.empty? && e.message =~ /wrong number of arguments/
           no_match = !(instance.shell.base.class.is_a?(instance.class))
-          if instance.is_a?(Thor::Group) or no_match 
-            raise e, "'#{instance.class}\##{name}' was called incorrectly. Are you sure provided " <<
-                     "arguments '#{formatted_arguments(instance.class)}'"
+          if instance.is_a?(Thor::Group) or no_match
+            msg << "Were required arguments provided? #{usg}"
+            raise e, msg
           else
-            raise InvocationError, "'#{instance.class}\##{name}' was called incorrectly. Call as " <<
-                                   "'#{formatted_usage(instance.class, true)}'"
+            msg << "Call as '#{usg}'"
+            raise InvocationError, msg
           end
         else
           raise e

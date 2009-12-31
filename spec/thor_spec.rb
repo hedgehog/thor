@@ -113,8 +113,8 @@ describe Thor do
 
     it "raises an error if a required param is not provided" do
       lambda do
-        MyScript.start(["animal"]) 
-      end.must raise_error(ArgumentError, /'animal' was called incorrectly. Are you sure it has arity equals to 0\?/)
+        MyScript.start(["animal"])
+      end.must  raise_error(ArgumentError, /my_script:animal called incorrectly. Were required arguments provided\? my_script:animal TYPE/)
     end
 
     it "raises an error if the invoked task does not exist" do
