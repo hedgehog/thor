@@ -43,13 +43,13 @@ describe Thor::Invocation do
     it "raises error on invoking the default task of namespace with wrong arity" do
       lambda do
         A.new.invoke('b', ['1'])
-      end.must raise_error(ArgumentError)
+      end.must raise_error(ArgumentError, /b:default called incorrectly. Were required arguments provided\? b:default  arg1, arg2, arg3/)
      end
 
     it "raises error on invoking the default task of class with wrong arity" do
       lambda do
         A.new.invoke(B, ['1'])
-      end.must raise_error(ArgumentError)
+      end.must raise_error(ArgumentError, /b:default called incorrectly. Were required arguments provided\? b:default  arg1, arg2, arg3/)
      end
 
     it "invokes the default task with default arguments of given class passed as default namespace" do
@@ -101,12 +101,12 @@ describe Thor::Invocation do
     it "raises no errors on invoking the default task  with default arguments of namespace with wrong arity" do
       lambda do
         A.new.invoke('d', ['1','','','',''])
-      end.must raise_error(ArgumentError)
+      end.must raise_error(ArgumentError, /d:default called incorrectly. Were required arguments provided\? d:default \[arg1\], \[arg2\], \[arg3\]/)
     end
     it "raises no errors on invoking the default task  with default arguments of namespace with wrong arity" do
       lambda do
         A.new.invoke(D, ['1','','','',''])
-      end.must raise_error(ArgumentError)
+      end.must raise_error(ArgumentError, /d:default called incorrectly. Were required arguments provided\? d:default \[arg1\], \[arg2\], \[arg3\]/)
      end
 
     it "accepts a class as argument with a task to invoke" do
