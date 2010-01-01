@@ -2,6 +2,14 @@ require 'thor/base'
 require 'thor/group'
 require 'thor/actions'
 
+if $THOR_TEST_STACK
+  $stdout.flush
+  require 'stringio'
+  require 'rubygems'
+  require 'rr'
+  require 'diff/lcs' # You need diff/lcs installed to run specs (but not to run Thor).  
+end
+
 class Thor
   class << self
     # Sets the default task when thor is executed without an explicit task to be called.
