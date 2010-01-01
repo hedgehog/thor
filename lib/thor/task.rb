@@ -45,7 +45,7 @@ class Thor
     # injected in the usage.
     #
     def formatted_usage(klass=nil, namespace=false, show_options=true)
-      formatted = formatted_arguments(klass, namespace)
+      formatted = "#{formatted_arguments(klass, namespace)}"
       formatted << " #{formatted_options}" if show_options
       formatted.strip!
       formatted
@@ -55,8 +55,8 @@ class Thor
     # is retrived from the class.
     #
     def formatted_task_name(klass=nil, namespace=false)
-      nm = name
-      ns = formatted_namespace(klass, namespace)
+      nm = "#{name}"
+      ns = "#{formatted_namespace(klass, namespace)}"
       if namespace
        "#{ns}#{nm}"
       else
@@ -88,8 +88,8 @@ class Thor
         usage.to_s
       end
       if namespace
-        ns = formatted_namespace(klass, namespace) 
-        ns << usg
+        ns = "#{formatted_namespace(klass, namespace)}"
+        ns << usg # don't use << you'll clobber the help text output
       else
         usg
       end
