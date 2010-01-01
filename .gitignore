@@ -2,4 +2,7 @@
 /coverage
 /spec/sandbox
 /rdoc
+/doc
+/nbproject
+*.orig
 thor.gemspec
